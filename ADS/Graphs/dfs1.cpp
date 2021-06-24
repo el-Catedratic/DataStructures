@@ -2,57 +2,38 @@
 
 using namespace std;
 
-//template<typename T>
-
 class Graph{
-
-    private:
-        int V;
-
     public:
-        unordered_map<int,vector<int>> lt;
+        unordered_map<int,list<int>> map;
         vector<bool> visited;
 
-        Graph(int V){
-            this->V = V;
-            visited = vector<bool>(V,0);
+        void add(int a,int b){
+            map[a].push_back(b);
+            map[b].push_back(a);
         }
 
-        void add(int num1,int num2){
-            if(lt.find(num1) != lt.end()) lt[num1].push_back(num2);
-            else{
-                lt.insert(make_pair(num1,vector<int>()));
-                lt[num1].push_back(num2);
-            }
-            if(lt.find(num2) != lt.end()) lt[num2].push_back(num1);
-            else{
-                lt.insert(make_pair(num2,vector<int>()));
-                lt[num2].push_back(num1);
-            }
-        }
-
-        void dfs(int num,vector<bool> &visited){
+        void dfs(int num){
+            cout<<num<<" ";
             visited[num] = true;
-            if(visited[num]){
-                return;
-            }
-            else{
-                for(int nbrs : lt[num]){
-                    cout<<nbrs<<" ";
-                    dfs(nbrs,visited);
+            for(auto it = map[num].begin();it!=(map[num].end());it++){
+                if(!visited[*it]){
+                    dfs(*it);
+                }
+                else{
+                    return;
                 }
             }
         }
- };
+};
 
- int main(){
-    Graph g(5);
-    int i = 5;
-    while(i--){
-        int temp,temp1;
-        cin>>temp>>temp1;
-        g.add(temp,temp1);
-    }
-    g.dfs(0,g.visited);
+int main(){
+    Graph g;
+    g.add(0,2);
+    g.add(1,3);
+    g.add(0,4);
+    g.add(1,5);
+    g.add(4,6);
+    g.add(5,2);
+    g.dfs(0);
     return 0;
- }
+}
