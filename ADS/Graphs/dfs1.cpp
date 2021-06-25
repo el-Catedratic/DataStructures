@@ -7,9 +7,23 @@ class Graph{
         unordered_map<int,list<int>> map;
         vector<bool> visited;
 
+        Graph(){
+            visited = vector<bool>(7,false);
+        }
+
         void add(int a,int b){
             map[a].push_back(b);
             map[b].push_back(a);
+        }
+
+        void Print(){
+            for(auto it = map.begin();it!= map.end();it++){
+                cout<<((it->first))<<" ";
+                for(auto pt = (it->second.begin());pt!=(it->second.end());pt++){
+                    cout<<*pt<<" ";
+                }
+                cout<<endl;
+            }
         }
 
         void dfs(int num){
@@ -19,10 +33,23 @@ class Graph{
                 if(!visited[*it]){
                     dfs(*it);
                 }
-                else{
-                    return;
-                }
             }
+        }
+
+        void bfs(int num){
+            queue<int> q;
+            q.push(num);
+            while(!q.empty()){
+                cout<<q.front()<<" ";
+                visited[q.front()] = true;
+                for(auto it = map[q.front()].begin();it!=map[q.front()].end();it++){
+                    if(!visited[*it]){
+                        q.push(*it);
+                    }
+                }
+                q.pop();
+            }
+            cout<<endl;
         }
 };
 
@@ -34,6 +61,7 @@ int main(){
     g.add(1,5);
     g.add(4,6);
     g.add(5,2);
-    g.dfs(0);
+    //g.Print();
+    g.bfs(0);
     return 0;
 }
